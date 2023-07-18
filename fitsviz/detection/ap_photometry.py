@@ -11,7 +11,6 @@ from astropy.stats import sigma_clipped_stats
 from fitsviz.detection.core import DetectionBase
 import pandas as pd
 import numpy as np
-from numba import jit
 import concurrent.futures
 import dask.dataframe as dd
 from dask.distributed import Client
