@@ -1,34 +1,51 @@
 from astropy.io import fits
-import dask.array as da
-import dask
-from dask.distributed import Client
+
 import numpy as np
-import glob
 
 
 
 
-def load_fits(file):
-    return fits.getdata(file)[0, 0, :, :]
 
-
-def sci_to_rms(file):
-    """_summary_
+def load_fits(file_name):
+    """
+    Load FITS files and index into data
 
     Args:
-        file (_type_): _description_
+        file_name (str):file path 
 
     Returns:
-        _type_: _description_
+        np.ndarray: Returned fits file at the first axis
     """
-    file = file.replace("tt0.subim.fits", "tt0.rms.subim.fits")
-    return fits.getdata(file)[0, 0, :, :]
+    return fits.getdata(file_name)[0, 0, :, :]
 
-def get_image_with_least_freq(science_images):
+
+def sci_to_rms(file_name):
+    """
+    Given a science filename, load its corresponding 
+
+    Args:
+        file_name (str):file path 
+
+    Returns:
+        np.ndarray: Returned fits file at the first axis
+    """
+    file_name = file.replace("tt0.subim.fits", "tt0.rms.subim.fits")
+    return fits.getdata(file_name)[0, 0, :, :]
+
+def get_image_with_least_freq(science_img_names):
+    """
+    Given a list of science files, get the image name with the lowest frequency.
+    Args:
+        science_img_names (list[str]): science file names
+
+    Returns:
+        str: science file name of lowest frequency
+    """
+    #MAX INT in python3
     cur_freq = 9223372036854775807
     least_freq_img = None
 
-    for sci_img in science_images:
+    for sci_img in science_img_names:
         sci_img_freq = fits.getheader(sci_img)['CRVAL3']
         if cur_freq > sci_img_freq:
             cur_freq = sci_img_freq
@@ -37,6 +54,11 @@ def get_image_with_least_freq(science_images):
 
 
 def create_dask_client(n_workers=4):
+    """Clean up dask dask client on system exit
+
+    Args:
+        dask_client (dask.distributed.Client): Dask client
+    """
     client = Client(n_workers=n_workers)
     return client
 
@@ -62,5 +84,10 @@ def calculate_spectral_indices(frequencies, flux_densities):
 
 
 def cleanup_dask_client(dask_client):
+    """Clean up dask dask client on system exit
+
+    Args:
+        dask_client (dask.distributed.Client): Dask client
+    """
     if dask_client is not None:
         dask_client.close()

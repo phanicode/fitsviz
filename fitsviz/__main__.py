@@ -9,6 +9,8 @@ import glob
 from os import path
 import numpy as np
 import logging
+from astropy.io import fits
+
 logging.basicConfig(level=logging.INFO)
 
 
@@ -47,9 +49,9 @@ def mkviz(input_dir, backend):
               "-a",
               "--algorithm",
               default="aperture",
-              type=click.Choice(["aperture",
-                                 "naive"]),
+              type=click.Choice(["aperture","custom"]),
               help="source detection algorithm")
+
 def mkstat(input_dir, output_dir, output_file_name, algorithm):
     """identify objects from the science image at the lowest frequency"""
     science_files = glob.glob(input_dir + "/*.pbcor.tt0.subim.fits")
@@ -63,16 +65,15 @@ def mkstat(input_dir, output_dir, output_file_name, algorithm):
     rms_img = du.sci_to_rms(low_sci_name)
 
     low_sci_img = du.load_fits(low_sci_name)
-    source_finder = ApertureDAO()
-    sources = source_finder.get_sources(low_sci_img, rms_img)
-    # Compute dask graph
-    summary = source_finder.process_sources(sources, science_files)
-    # Write sources file to csv
-    out_path = path.join(output_dir, output_file_name)
-
-
-    summary.to_csv(out_path, index=False)
-    logging.info(f"Source detection algorithm successful, saved to {out_path}")
+    if algorithm == "aperture":
+        source_finder = ApertureDAO()
+        sources = source_finder.get_sources(low_sci_img, rms_img)
+        # Compute dask graph
+        summary = source_finder.process_sources(sources, science_files)
+        # Write sources file to csv
+        out_path = path.join(output_dir, output_file_name)
+        summary.to_csv(out_path, index=False)
+        logging.info(f"Source detection algorithm: {aperture} successful, saved to {out_path}")
 
 
 if __name__ == "__main__":

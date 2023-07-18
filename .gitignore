@@ -1,0 +1,12 @@
+!*/
+!*.*py
+!*file
+!*.y*ml
+!*.ipynb
+.ipynb_checkpoints/
+__pycache__/
+!*.egg-info
+UNKNOWN.egg-info/
+dask-worker-space/
+fitsviz.egg-info/
+fitsenv
