@@ -38,7 +38,9 @@ def mkviz(input_dir, backend):
 
 
 @fitsviz.command()
-@click.option('input_dir', '-i', type=click.Path(exists=True))
+@click.option('input_dir',
+               '-i',
+                 type=click.Path(exists=True))
 @click.option('output_dir',
               '-od',
               type=click.Path(exists=True),
@@ -73,7 +75,7 @@ def mkstat(input_dir, output_dir, output_file_name, algorithm):
         # Write sources file to csv
         out_path = path.join(output_dir, output_file_name)
         summary.to_csv(out_path, index=False)
-        logging.info(f"Source detection algorithm: {aperture} successful, saved to {out_path}")
+        logging.info(f"Source detection algorithm: {algorithm} successful, saved to {out_path}")
 
 
 if __name__ == "__main__":

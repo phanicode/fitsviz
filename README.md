@@ -1,4 +1,4 @@
-# fitsviz Package
+# fitsviz
 
 fitsviz is a Python package that provides functionality for visualizing and analyzing FITS (Flexible Image Transport System) files. It includes two main commands: `mkstat` and `mkviz`. 
 
@@ -6,15 +6,13 @@ fitsviz is a Python package that provides functionality for visualizing and anal
 
 To install fitsviz, you can use pip and the provided `pyproject.toml` file:
 
-pip install fitsviz
-
-
+`pip install fitsviz`
 
 
 ## Usage
 
 ### mkstat Command
-
+```
 The `mkstat` command is used to identify objects from the science image at the lowest frequency. It supports the following options:
 
 Usage: fitsviz mkstat [OPTIONS]
@@ -27,7 +25,7 @@ Options:
 -o, --output_file_name TEXT Detected CSV file name
 -a, --algorithm [aperture|naive]
 Source detection algorithm
---help Show this message and exit.
+```
 
 
 Copy code
@@ -40,6 +38,7 @@ fitsviz mkstat -i path/to/science_images -od path/to/output_dir -o detected.csv 
 
 
 ### mkviz Command
+```
 
 The `mkviz` command is used to visualize the lowest frequency science image in a directory. It supports the following options:
 
@@ -48,10 +47,10 @@ Usage: fitsviz mkviz [OPTIONS]
 Visualize the lowest frequency science image in a directory
 
 Options:
--i, --input_dir PATH Path to the directory containing the science images
+`-i, --input_dir PATH Path to the directory containing the science images
 -b, --backend [matplotlib|bokeh]
 Visualization backend
---help Show this message and exit.
+```
 
 
 

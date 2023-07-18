@@ -1,7 +1,6 @@
 from astropy.io import fits
-
 import numpy as np
-
+from dask.distributed import Client
 
 
 
@@ -29,7 +28,7 @@ def sci_to_rms(file_name):
     Returns:
         np.ndarray: Returned fits file at the first axis
     """
-    file_name = file.replace("tt0.subim.fits", "tt0.rms.subim.fits")
+    file_name = file_name.replace("tt0.subim.fits", "tt0.rms.subim.fits")
     return fits.getdata(file_name)[0, 0, :, :]
 
 def get_image_with_least_freq(science_img_names):
@@ -73,6 +72,8 @@ def calculate_spectral_indices(frequencies, flux_densities):
     """
     log_frequencies = np.log10(frequencies)
     log_flux_densities = np.log10(flux_densities)
+    print(len(log_frequencies))
+    print(len(log_flux_densities))
 
     # Fit a linear regression to calculate the spectral index
     coefficients = np.polyfit(log_frequencies, log_flux_densities, deg=1)

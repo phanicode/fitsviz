@@ -1,8 +1,10 @@
-from abc import ABC, abstractmethod, ABCMeta
-import numpy as np
-from photutils import DAOStarFinder
-from astropy.stats import sigma_clipped_stats
-import dask
+"""
+This module implements the base class and star finder kernel for
+detecting stars in an astronomical image. Each star-finding class should
+define a method called ``find_stars`` that finds stars in an image.
+"""
+
+from abc import abstractmethod, ABCMeta
 
 
 class DetectionBase(metaclass=ABCMeta):
@@ -20,5 +22,23 @@ class DetectionBase(metaclass=ABCMeta):
         Args:
             science_data (np.ndarray): Science data
             rms_data (np.ndarray): RMS data
+
+        Returns:
+            table (pd.DataFrame): table with xcentroid,ycentroid,flux,spectral_index as columns. or None
         """
-        pass
+        raise NotImplementedError('Needs to be implemented in a subclass.')
+    
+    @abstractmethod
+    def process_sources(self, science_data, rms_data):
+        """Given science and rms files, apply a custom detection algorithm
+
+        Args:
+            science_data (np.ndarray): Science data
+            rms_data (np.ndarray): RMS data
+
+        Returns:
+            table (pd.DataFrame): table with xcentroid,ycentroid,flux,spectral_index as columns. or None
+        """
+        raise NotImplementedError('Needs to be implemented in a subclass.')
+        
+    
