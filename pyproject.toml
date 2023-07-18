@@ -9,7 +9,7 @@ version = "0.0.2"
 description = "Autodetection of sources and visualization of FITS files"
 
 authors = [
-    {name="Phani Velicheti",email = "<phaniv@arizona.edu>"}
+    {name="Phani Velicheti",email = "phaniv@arizona.edu"}
 ]
 
 readme = "README.md"
