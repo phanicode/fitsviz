@@ -3,14 +3,19 @@ from bokeh.plotting import figure, show
 from bokeh.models import LinearColorMapper, HoverTool, ColumnDataSource
 from bokeh.palettes import Viridis256
 from photutils.aperture import CircularAperture
-from fitsviz.utils import dask_utils as du
+from fitsviz.utils import cutils as cu
 from fitsviz.detection import ap_photometry
 
 
 def visualize_bokeh(sci_img):
+    """_summary_
+
+    Args:
+        sci_img (_type_): _description_
+    """
     # open science and rms image
-    sci_data = du.load_fits(sci_img)
-    rms_data = du.load_fits(du.sci_to_rms(sci_img))
+    sci_data = cu.load_fits(sci_img)
+    rms_data = cu.load_fits(cu.sci_to_rms(sci_img))
 
     # get the list of sources and the mean
     sources, mean = ap_photometry.get_sources(sci_data, rms_data)

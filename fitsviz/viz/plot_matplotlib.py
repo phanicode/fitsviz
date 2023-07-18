@@ -1,7 +1,7 @@
 import matplotlib.pyplot as plt
 import numpy as np
-import dask as da
-from fitsviz.utils import dask_utils as du
+
+from fitsviz.utils import cutils as cu
 from photutils import CircularAperture
 from astropy.visualization import SqrtStretch
 from astropy.visualization.mpl_normalize import ImageNormalize
@@ -9,11 +9,17 @@ from fitsviz.detection.ap_photometry import ApertureDAO
 
 
 def da_visualize(sci_img, rms_img):
+    """TODO
+
+    Args:
+        sci_img (): _description_
+        rms_img (_type_): _description_
+    """
     # Load science img
     # da.from_array(fits.getdata(file)[0,0,:,:])
-    sci_data = du.load_fits(sci_img)
+    sci_data = cu.load_fits(sci_img)
     # Load rms by parsing file
-    rms_data = du.load_fits(rms_img)
+    rms_data = cu.load_fits(rms_img)
 
     rms_med = np.nanmedian(rms_data)
 

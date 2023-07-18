@@ -72,8 +72,6 @@ def calculate_spectral_indices(frequencies, flux_densities):
     """
     log_frequencies = np.log10(frequencies)
     log_flux_densities = np.log10(flux_densities)
-    print(len(log_frequencies))
-    print(len(log_flux_densities))
 
     # Fit a linear regression to calculate the spectral index
     coefficients = np.polyfit(log_frequencies, log_flux_densities, deg=1)

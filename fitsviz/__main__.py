@@ -1,7 +1,7 @@
 # pylint: disable=invalid-syntax
 # use logging to print messages to the console
 import dask
-from fitsviz.utils import dask_utils as du
+from fitsviz.utils import cutils as cu
 from fitsviz.detection.ap_photometry import ApertureDAO
 from fitsviz.viz import plot_bokeh, plot_matplotlib
 import click
@@ -29,12 +29,12 @@ def mkviz(input_dir, backend):
     science_files = glob.glob(input_dir + "/*.pbcor.tt0.subim.fits")
     if len(science_files) == 0:
         raise click.BadParameter('No science images found in directory')
-    low_sci = du.get_image_with_least_freq(science_files)
+    low_sci = cu.get_image_with_least_freq(science_files)
 
     if backend == 'bokeh':
         plot_bokeh()
     else:
-        plot_matplotlib.da_visualize(low_sci, du.sci_to_rms(low_sci))
+        plot_matplotlib.da_visualize(low_sci, cu.sci_to_rms(low_sci))
 
 
 @fitsviz.command()
@@ -60,21 +60,23 @@ def mkstat(input_dir, output_dir, output_file_name, algorithm):
 
     if len(science_files) == 0:
         raise click.BadParameter('No science images found in directory')
-    print('hi22')
     # get the lowest frequency science image
-    low_sci_name = du.get_image_with_least_freq(science_files)
+    low_sci_name = cu.get_image_with_least_freq(science_files)
 
-    rms_img = du.sci_to_rms(low_sci_name)
+    rms_img = cu.sci_to_rms(low_sci_name)
 
-    low_sci_img = du.load_fits(low_sci_name)
+    low_sci_img = cu.load_fits(low_sci_name)
     if algorithm == "aperture":
+
         source_finder = ApertureDAO()
         sources = source_finder.get_sources(low_sci_img, rms_img)
         # Compute dask graph
         summary = source_finder.process_sources(sources, science_files)
         # Write sources file to csv
+        
         out_path = path.join(output_dir, output_file_name)
         summary.to_csv(out_path, index=False)
+
         logging.info(f"Source detection algorithm: {algorithm} successful, saved to {out_path}")
 
 

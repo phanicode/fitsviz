@@ -2,7 +2,7 @@
 This module implements the ApertureDAO class,utilizing the DAOStarFinder algorithm 
 """
 
-from fitsviz.utils import dask_utils as du
+from fitsviz.utils import cutils as cu
 import time
 import dask
 from astropy.io import fits
@@ -51,9 +51,9 @@ class ApertureDAO(DetectionBase):
 
     #     for sci in sci_img_list:
 
-    #         sciimg = du.load_fits(sci)
+    #         sciimg = cu.load_fits(sci)
 
-    #         median = np.nanmedian(du.sci_to_rms(sci))
+    #         median = np.nanmedian(cu.sci_to_rms(sci))
 
     #         flux_accross_frequencies = []
     #         # median subtraction
@@ -78,7 +78,7 @@ class ApertureDAO(DetectionBase):
     #     flux_df = flux_df.T
     #     # calculate spectral index of each source
     #     flux_df["spectral_index"] = [
-    #         du.calculate_spectral_indices(freqs, row) for _, row in flux_df.iterrows()
+    #         cu.calculate_spectral_indices(freqs, row) for _, row in flux_df.iterrows()
     #     ]
     #     # rows: x coordinate, y coordinate,flux of lowest frequency,spectral
     #     # index of source
@@ -109,9 +109,25 @@ class ApertureDAO(DetectionBase):
 
         sources = daofind(science_data - median)
         end2 = time.time()
-        print(f"STATS TIME:{end-st} DAOFINDER TIME : {end2-st2}")
 
         return sources
+    
+
+    @dask.delayed
+    def calculate_flux(self,sci,positions):
+        sciimg = cu.load_fits(sci)
+        median = np.nanmedian(cu.sci_to_rms(sci))
+        flux_accross_frequencies = []
+        # Median subtraction
+        adj_sci = sciimg - median
+        # Go through every source and find its flux
+        for _, row in positions.iterrows():
+            x = int(row[0])
+            y = int(row[1])
+            # Flux is crudely defined as the sum of values inside the aperture
+            flux = np.nansum(adj_sci[y - 5 : y + 5, x - 5 : x + 5])
+            flux_accross_frequencies.append(flux)
+        return flux_accross_frequencies
 
     # # DASK INITIAL ATTEMPT
     def process_sources(self, sources, sci_img_list):
@@ -131,27 +147,8 @@ class ApertureDAO(DetectionBase):
 
         # Initialize an empty Dask DataFrame
         flux_df = dd.from_pandas(pd.DataFrame(), npartitions=multiprocessing.cpu_count())
-
-        @dask.delayed
-        def calculate_flux(sci):
-            sciimg = du.load_fits(sci)
-            median = np.nanmedian(du.sci_to_rms(sci))
-            flux_accross_frequencies = []
-
-            # Median subtraction
-            adj_sci = sciimg - median
-
-            # Go through every source and find its flux
-            for _, row in positions.iterrows():
-                x = int(row[0])
-                y = int(row[1])
-                # Flux is crudely defined as the sum of values inside the aperture
-                flux = np.nansum(adj_sci[y - 5 : y + 5, x - 5 : x + 5])
-                flux_accross_frequencies.append(flux)
-
-            return flux_accross_frequencies
         # Calculate flux for each science image
-        fluxes = [calculate_flux(sci) for sci in sci_img_list]
+        fluxes = [self.calculate_flux(sci,positions) for sci in sci_img_list]
         fluxes = dask.compute(*fluxes)
 
         for flux in fluxes:
@@ -161,20 +158,15 @@ class ApertureDAO(DetectionBase):
         freqs = [fits.getheader(sci)["CRVAL3"] for sci in sci_img_list]
         flux_df = flux_df.compute()
         flux_df = flux_df.T
-        print(flux_df)
 
-        #Calculate spectral index of each source
-        # @dask.delayed
-        # def calculate_spectral_index(row):
-        #     return du.calculate_spectral_indices(freqs, row)
 
-        spx = [du.calculate_spectral_indices(freqs, row) for _, row in flux_df.iterrows()]
+        spx = [cu.calculate_spectral_indices(freqs, row) for _, row in flux_df.iterrows()]
         flux_df.columns = [i for i in range(len(flux_df.columns))]
         flux_df["spectral_index"] = spx
         # Rows: x coordinate, y coordinate, flux of lowest frequency, spectral index of source
         lowest_idx = np.argmin(freqs)
         summary = positions.join(flux_df[[lowest_idx, "spectral_index"]])
-        summary = summary.rename(columns={lowest_idx: "flux"})
+        summary = summary.rename(columns={lowest_idx: "flux"}).compute()
 
         
 
@@ -204,8 +196,8 @@ class ApertureDAO(DetectionBase):
 
     #     @dask.delayed
     #     def calculate_flux(sci):
-    #         sciimg = du.load_fits(sci)
-    #         median = np.nanmedian(du.sci_to_rms(sci))
+    #         sciimg = cu.load_fits(sci)
+    #         median = np.nanmedian(cu.sci_to_rms(sci))
     #         flux_accross_frequencies = []
 
     #         # Median subtraction
@@ -233,7 +225,7 @@ class ApertureDAO(DetectionBase):
     #     # Calculate spectral index of each source
     #     @dask.delayed
     #     def calculate_spectral_index(row):
-    #         return du.calculate_spectral_indices(freqs, row)
+    #         return cu.calculate_spectral_indices(freqs, row)
 
     #     flux_df["spectral_index"] = flux_df.apply(
     #         calculate_spectral_index, axis=1, meta=("spectral_index", "float64")
