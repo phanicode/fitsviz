@@ -1,9 +1,17 @@
 [build-system]
 build-backend = "setuptools.build_meta"
-requires-python = ">= 3.8, < 3.12"
+requires = ['setuptools>=68.0.0']
+
+[project]
 readme = "README.md"
-requires = [
-    'setuptools>=68.0.0',
+authors = [
+    {name="Phani Velicheti",email = "<phaniv@arizona.edu>"}
+]
+description = "Autodetection of sources and visualization of FITS files"
+requires-python = ">= 3.8"
+version = "0.0.2"
+
+dependencies = [
     'poetry-core>=1.1.0',
     'astropy==5.3.1',
     'bokeh==3.2.0',
@@ -17,10 +25,7 @@ requires = [
 ]
 [tool.poetry]
 name = "fitsviz"
-version = "0.0."
 url = "https://github.com/phanicode/fitsviz"
-authors = [
-    "Phani Velicheti <phaniv@arizona.edu>"
-]
 
-description = "Autodetection of sources and visualization of FITS files"
+
+
