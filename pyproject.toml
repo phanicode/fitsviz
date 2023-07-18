@@ -3,6 +3,8 @@ build-backend = "setuptools.build_meta"
 requires-python = ">= 3.8, < 3.12"
 readme = "README.md"
 requires = [
+    'setuptools>=68.0.0',
+    'poetry-core>=1.1.0',
     'astropy==5.3.1',
     'bokeh==3.2.0',
     'click==8.0.4',
