@@ -89,11 +89,12 @@ def mkstat(input_dir, output_dir, output_file_name, algorithm):
     rms_img = cu.sci_to_rms(low_sci_name)
     # load science image
     low_sci_img = cu.load_fits(low_sci_name)
-    source_finder = None
+    
 
     if algorithm == "aperture":
         logging.info("Initiating aperture DAO algorithm")
         source_finder = ApertureDAO(science_files)
+    #
 
     # Get source positions
     sources = source_finder.get_sources(low_sci_img, rms_img)
@@ -104,17 +105,22 @@ def mkstat(input_dir, output_dir, output_file_name, algorithm):
     # Positions, flux value at lowest image and spectral index.
     summary = source_finder.get_summary(fluxs)
 
+    
     results_index = {
         "science_file": low_sci_name,
         "flux_freq_file": path.join(output_dir, "flux_freq.csv"),
         "summary_file": path.join(output_dir, output_file_name)
     }
-
+    try:
     with open(path.join(output_dir, "link.json"), "w") as json_file:
         json.dump(results_index, json_file)
-
-    fluxs.to_csv(results_index["flux_freq_file"], index=False)
-    summary.to_csv(results_index["summary_file"], index=False)
+    
+        fluxs.to_csv(results_index["flux_freq_file"], index=False)
+        summary.to_csv(results_index["summary_file"], index=False)
+    except Exception as e:
+        print("Sources found but file writing not successful")
+    
+    
 
     logging.info(
         f"Source detection algorithm: {algorithm} successful, refer to link.json for save details")

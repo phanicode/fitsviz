@@ -1,5 +1,6 @@
 """
 This module implements the ApertureDAO class,utilizing the DAOStarFinder algorithm 
+Link: https://ui.adsabs.harvard.edu/abs/1987PASP...99..191S/abstract
 """
 
 from fitsviz.utils import cutils as cu
@@ -49,16 +50,20 @@ class ApertureDAO(DetectionBase):
             sources,summary (np.ndarray,list): List of sources and summary statistics
         """
 
+        
         # Sigma clipped statistics for RMS file
         mean, median, _ = sigma_clipped_stats(rms_data, sigma=3.0)
         # find the stars with DAO alg
-        daofind = DAOStarFinder(fwhm=3.0, threshold=5. * mean)
 
+
+        daofind = DAOStarFinder(fwhm=3.0, threshold=5. * mean)
+    
         sources = daofind(science_data - median)
+
         return sources
 
     @dask.delayed
-    def calculate_flux(self, sci, positions):
+    def _calculate_flux(self, sci, positions):
         sciimg = cu.load_fits(sci)
         median = np.nanmedian(cu.sci_to_rms(sci))
         flux_accross_frequencies = []
@@ -94,7 +99,7 @@ class ApertureDAO(DetectionBase):
             pd.DataFrame(), npartitions=multiprocessing.cpu_count())
         # Calculate flux for each science image
 
-        fluxes = [self.calculate_flux(sci, positions)
+        fluxes = [self._calculate_flux(sci, positions)
                   for sci in self.science_images]
         fluxes = dask.compute(*fluxes)
 

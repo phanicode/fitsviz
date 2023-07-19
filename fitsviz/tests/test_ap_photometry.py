@@ -3,6 +3,7 @@ import numpy as np
 from astropy.io import fits
 from dask.distributed import Client
 from fitsviz.detection.ap_photometry import ApertureDAO
+import pandas as pd
 
 # Test the ApertureDAO class
 

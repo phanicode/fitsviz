@@ -1,3 +1,2 @@
-from .core import *
-from .ap_photometry import *
-from ..utils import *
+from fitsviz.core import *
+from fitsviz.ap_photometry import *

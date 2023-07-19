@@ -97,14 +97,17 @@ Please install this package in edit mode with
 
 The package is structured as follows:
 
-utils/cutils - common utils sucha as file loading, file parsing etc
+utils/cutils - common utils such as file loading, file parsing etc
 viz - visualization plots with custom backends
 test - unit tests with pytest
 detection - detection algorithms
 
+# Developing new Algorithms
 DetectionBase is the abstract base class for star finders.
 All source detection algorithms should have DetectionBase as the base class
 and implement  `get_sources` ,`get_fluxs` and `get_summary`
+
+![UML diagram](UML.png)
 
 The only supported algorithm right now is DAOStarFinder with a crude approximation of aperture photometry
 
