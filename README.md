@@ -66,7 +66,7 @@ Options:
 
 Example usage:
 
-fitsviz mkviz -i path/to/science_images -b matplotlib
+fitsviz mkviz -i link.json -b bokeh
 
 
 
