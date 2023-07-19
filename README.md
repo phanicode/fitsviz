@@ -80,7 +80,7 @@ The fitsviz package depends on the following libraries and versions:
 - 'dask>=2023.5.0',
 - 'matplotlib>=3.7.2',
 - 'numpy>=1.20.1',
-- 'pandas>=2.0.3',
+- 'pandas==1.5.3',
 - 'scipy>=1.11.1',
 - 'photutils>=1.8.0',
 - 'dask[distributed]>=2023.7.0'
