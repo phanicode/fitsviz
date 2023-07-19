@@ -60,7 +60,7 @@ def visualize_source(sci_file, sources):
     circle_sources.data = dict(x=sources['xcentroid'], y=sources['ycentroid'],
                                flux=sources['flux'], peak=sources['spectral_index'])
 
-    # show(fig)
+    show(fig)
     return fig
 
 
@@ -119,7 +119,7 @@ def grid_view(sci_file, sources):
 
     grid = gridplot(plots, ncols=3)
 
-    # show(grid)
+    show(grid)
     return grid
 
 
@@ -161,7 +161,7 @@ def plot_flux_freq(flux_df, sources):
 
         # Create a grid of plots with 2 columns
     grid = gridplot(plots, ncols=3)
-    # show(grid)
+    show(grid)
 
     # Show the grid of plots
     return grid
