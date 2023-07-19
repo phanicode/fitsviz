@@ -3,8 +3,6 @@ import numpy as np
 from dask.distributed import Client
 
 
-
-
 def load_fits(file_name):
     """
     Load FITS files and index into data
@@ -31,6 +29,7 @@ def sci_to_rms(file_name):
     file_name = file_name.replace("tt0.subim.fits", "tt0.rms.subim.fits")
     return fits.getdata(file_name)[0, 0, :, :]
 
+
 def get_image_with_least_freq(science_img_names):
     """
     Given a list of science files, get the image name with the lowest frequency.
@@ -40,7 +39,7 @@ def get_image_with_least_freq(science_img_names):
     Returns:
         str: science file name of lowest frequency
     """
-    #maximum value for a 64-bit signed integer.
+    # maximum value for a 64-bit signed integer.
     cur_freq = 9223372036854775807
     least_freq_img = None
 
@@ -61,6 +60,7 @@ def create_dask_client(n_workers=4):
     client = Client(n_workers=n_workers)
     return client
 
+
 def calculate_spectral_indices(frequencies, flux_densities):
     """
     Calculate the spectral index of a source given a list of frequencies and flux densities
@@ -78,8 +78,6 @@ def calculate_spectral_indices(frequencies, flux_densities):
     spectral_index = coefficients[0]
 
     return spectral_index
-
-
 
 
 def cleanup_dask_client(dask_client):

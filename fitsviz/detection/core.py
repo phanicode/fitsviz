@@ -27,7 +27,7 @@ class DetectionBase(metaclass=ABCMeta):
             table (pd.DataFrame): table with xcentroid,ycentroid,flux,spectral_index as columns. or None
         """
         raise NotImplementedError('Needs to be implemented in a subclass.')
-    
+
     @abstractmethod
     def get_fluxs(self, sources):
         """Given science and rms files, apply a custom detection algorithm
@@ -40,9 +40,9 @@ class DetectionBase(metaclass=ABCMeta):
             table (pd.DataFrame): table with xcentroid,ycentroid,flux,spectral_index as columns. or None
         """
         raise NotImplementedError('Needs to be implemented in a subclass.')
-    
+
     @abstractmethod
-    def get_summary(self,fluxs):
+    def get_summary(self, fluxs):
         """Given science and rms files, apply a custom detection algorithm
 
         Args:
@@ -52,5 +52,4 @@ class DetectionBase(metaclass=ABCMeta):
         Returns:
             table (pd.DataFrame): table with xcentroid,ycentroid,flux,spectral_index as columns. or None
         """
-        raise NotImplementedError('Needs to be implemented in a subclass.') 
-    
+        raise NotImplementedError('Needs to be implemented in a subclass.')

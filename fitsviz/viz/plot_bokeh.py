@@ -1,6 +1,5 @@
 
 
-
 import numpy as np
 from bokeh.plotting import figure, show
 from bokeh.models import LinearColorMapper, HoverTool, ColumnDataSource
@@ -12,7 +11,8 @@ from photutils.aperture import CircularAperture
 from fitsviz.utils import cutils as cu
 from fitsviz.detection import ap_photometry
 
-def visualize_source(sci_file,sources):
+
+def visualize_source(sci_file, sources):
     """Visualize lowest frequency science FITS file interactively in Bokeh.
     FITS file is plotted with circles indicating sources, which can be zoomed in the html file.
 
@@ -38,12 +38,12 @@ def visualize_source(sci_file,sources):
 
     # plot mean subtracted image
     fig.image(image=[sci_data - mean], x=0, y=0, dw=sci_data.shape[1], dh=sci_data.shape[0],
-            color_mapper=color_mapper)
+              color_mapper=color_mapper)
 
     # Create a ColumnDataSource for the sources inside the circles
     circle_sources = ColumnDataSource(data=dict(x=[], y=[], flux=[], peak=[]))
     circle_glyph = fig.circle(x='x', y='y', radius=100, line_color='black', line_width=1.5, line_alpha=1.0,
-                            fill_color='rgba(0, 0, 255, 0)', source=circle_sources)
+                              fill_color='rgba(0, 0, 255, 0)', source=circle_sources)
 
     # Set up hover tool with columns of sources
     hover = HoverTool(renderers=[circle_glyph], tooltips=[('X Centroid', '@x'),
@@ -58,13 +58,12 @@ def visualize_source(sci_file,sources):
     # Update the ColumnDataSource with sources inside the circles
     circle_sources.data = dict(x=sources['xcentroid'], y=sources['ycentroid'],
                                flux=sources['flux'], peak=sources['spectral_index'])
-    
+
     # show(fig)
     return fig
 
 
-
-def grid_view(sci_file,sources):
+def grid_view(sci_file, sources):
     """
     Grid view of all sources in lowest frequency science FITS file
 
@@ -76,7 +75,7 @@ def grid_view(sci_file,sources):
         bokeh.models.plots.GridPlot: Bokeh plot containing all sources
     """
 
-    #Load science and rms files
+    # Load science and rms files
     sci_data = cu.load_fits(sci_file)
     rms_data = cu.sci_to_rms(sci_file)
 
@@ -101,7 +100,7 @@ def grid_view(sci_file,sources):
 
         # Create a new plot for each circle
         fig = figure(title=f"Plot {i+1}\n x:{xcentroid}, y:{ycentroid}",
-                   x_axis_label="x", y_axis_label="y", width=300, height=300 )
+                     x_axis_label="x", y_axis_label="y", width=300, height=300)
 
         # Set up hover tool with columns of sources at the center
         hover = HoverTool(tooltips=[('X Centroid', str(xcentroid)),
@@ -109,23 +108,24 @@ def grid_view(sci_file,sources):
                                     ('Flux (Jy)', str(flux))])
 
         # Plot the extracted region
-        fig.image(image=[region - mean], x=0, y=0, dw=region.shape[1], dh=region.shape[0])
+        fig.image(image=[region - mean], x=0, y=0,
+                  dw=region.shape[1], dh=region.shape[0])
 
         # Add hover tool to the plot
         fig.add_tools(hover)
 
         plots.append(fig)
-    
+
     grid = gridplot(plots, ncols=3)
 
-    #show(grid)
+    # show(grid)
     return grid
 
 
-def plot_flux_freq(flux_df,sources):
+def plot_flux_freq(flux_df, sources):
     """
         Flux vs frequency plot of detected astronomical sources.
-    
+
     Returns:
         bokeh.models.plots.GridPlot: Bokeh plot containing all sources
     Args:
@@ -137,21 +137,22 @@ def plot_flux_freq(flux_df,sources):
     Returns:
         Bokeh object containig plotted files
     """
-    
-    freqs = list(flux_df.columns)
 
+    freqs = list(flux_df.columns)
 
     plots = []
     for idx, row in flux_df.iterrows():
         # Create a new figure for each row
         image_title = f"Source: {sources.xcentroid[idx],sources.xcentroid[idx]}, Spectral index = {sources.spectral_index[idx]}"
-        p = figure(title=image_title, x_axis_label="Frequency (GHz)", y_axis_label="Flux (Jy)", width=500, height=500)
+        p = figure(title=image_title, x_axis_label="Frequency (GHz)",
+                   y_axis_label="Flux (Jy)", width=500, height=500)
 
         # Plot frequency  vs flux
         p.scatter(freqs, row.values)
 
         # Add the hover tool with x and y information
-        hover = HoverTool(tooltips=[("Frequency (GHz)", "@x"), ("Flux (Jy)", "@y")], mode="vline")
+        hover = HoverTool(
+            tooltips=[("Frequency (GHz)", "@x"), ("Flux (Jy)", "@y")], mode="vline")
         p.add_tools(hover)
 
         # Add the plot to the ist
@@ -159,7 +160,7 @@ def plot_flux_freq(flux_df,sources):
 
         # Create a grid of plots with 2 columns
     grid = gridplot(plots, ncols=3)
-    #show(grid)
+    # show(grid)
 
-        # Show the grid of plots
+    # Show the grid of plots
     return grid
