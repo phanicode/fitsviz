@@ -5,7 +5,7 @@ requires = ['setuptools>=68.0.0']
 [project]
 
 name = "fitsviz"
-version = "0.0.5"
+version = "0.0.8"
 description = "Autodetection of sources and visualization of FITS files"
 
 authors = [
@@ -17,15 +17,17 @@ requires-python = ">= 3.8, < 3.12"
 
 dependencies = [
     'poetry-core',
-    'astropy',
+    'astropy==5.3.1',
     'bokeh',
     'click',
     'dask',
-    'matplotlib',
+    'matplotlib==3.7.2',
     'numpy',
     'pandas',
-    'photutils',
+    'scipy==1.11.1',
+    'photutils==1.8.0',
     'dask[distributed]'
+
 ]
 
 

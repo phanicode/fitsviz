@@ -1,6 +1,6 @@
 import matplotlib.pyplot as plt
 import numpy as np
-
+import dask.array as da
 from fitsviz.utils import cutils as cu
 from photutils import CircularAperture
 from astropy.visualization import SqrtStretch

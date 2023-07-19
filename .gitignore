@@ -1,5 +1,6 @@
 !*/
 !*.*py
+*.__pycache__
 !*file
 !*.y*ml
 !*.ipynb
