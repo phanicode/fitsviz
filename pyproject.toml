@@ -31,5 +31,5 @@ dependencies = [
 
 ]
 
-
-
+[project.scripts]
+fitsviz = "fitsviz.__main__:fitsviz"
