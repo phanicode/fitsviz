@@ -40,7 +40,7 @@ def get_image_with_least_freq(science_img_names):
     Returns:
         str: science file name of lowest frequency
     """
-    #MAX INT in python3
+    #maximum value for a 64-bit signed integer.
     cur_freq = 9223372036854775807
     least_freq_img = None
 

@@ -1,6 +1,7 @@
 !*/
 !*.*py
 *.__pycache__
+.pyc
 !*file
 !*.y*ml
 !*.ipynb
@@ -11,3 +12,5 @@ UNKNOWN.egg-info/
 dask-worker-space/
 fitsviz.egg-info/
 fitsenv
+fitsviz/__init__.pyc
+fitsviz/utils/__init__.pyc
