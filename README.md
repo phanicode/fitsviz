@@ -45,8 +45,10 @@ visualize the lowest frequency science image in a directory
 Options:
   -i PATH                         path to link.json  [required]
   -vt, --vis_type [raw|grid|fvf]  raw = Large science image with highlighted
-                                  sources ,grid = show interactive gridded
-                                  plot of sources,  fvf = plot flux vs
+                                  sources ,
+                                  grid = show interactive gridded
+                                  plot of sources,
+                                  fvf = plot flux vs
                                   frequency of all sources  [required]
   -od PATH                        OPTIONAL, Output directory ,Defaults to pwd
   -b, --backend [bokeh]           OPTIONAL: Visualization backend, Defaults to
@@ -109,7 +111,8 @@ and implement  `get_sources` ,`get_fluxs` and `get_summary`
 
 ![UML diagram](UML.png)
 
-The only supported algorithm right now is DAOStarFinder with a crude approximation of aperture photometry
+The only supported algorithm right now is AperterDAO, which is a DAO Finder with a crude approximation of aperture photometry
+https://ui.adsabs.harvard.edu/abs/1987PASP...99..191S/abstract
 
 All visualization programs should exist in viz and should not call DetectionBase
 
