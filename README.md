@@ -35,7 +35,7 @@ Options:
                                to aperture
 
 ```
-
+`mkstat` writes 3 files which are used by `mkviz`
 
 ### mkviz Command
 ```
@@ -67,16 +67,17 @@ fitsviz mkviz -i path/to/science_images -b matplotlib
 
 The fitsviz package depends on the following libraries and versions:
 
-- astropy==5.3.1
-- bokeh==3.2.0
-- click==8.0.4
-- dask==2021.10.0
-- matplotlib==3.4.3
-- numba==0.54.1
-- numpy==1.22.3
-- pandas==2.0.3
-- photutils==1.8.0
-- setuptools==58.0.4
+
+- 'poetry-core',
+- 'bokeh>=3.2.0',
+- 'click>=8.1.5',
+- 'dask>=2023.5.0',
+- 'matplotlib>=3.7.2',
+- 'numpy>=1.20.1',
+- 'pandas>=2.0.3',
+- 'scipy>=1.11.1',
+- 'photutils>=1.8.0',
+- 'dask[distributed]>=2023.7.0'
 
 Please ensure that these dependencies are installed in your Python environment.
 
