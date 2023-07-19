@@ -1,5 +1,6 @@
-
-
+"""
+File containing bokeh backend plots
+"""
 import numpy as np
 from bokeh.plotting import figure, show
 from bokeh.models import LinearColorMapper, HoverTool, ColumnDataSource

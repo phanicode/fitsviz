@@ -1,3 +1,6 @@
+"""
+Common utils for all modules and algorithms
+"""
 from astropy.io import fits
 import numpy as np
 from dask.distributed import Client
