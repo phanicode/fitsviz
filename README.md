@@ -9,7 +9,12 @@ To install fitsviz, you can use pip and the provided `pyproject.toml` file:
 `pip install fitsviz`
 
 
+
 ## Usage
+
+The program makes some key assumptions:
+1) All extracted RMS files and science files are in the same directory
+2) RMS image format: *.rms.subim.fits , science image format: *.tt0.subim.fits
 
 ### mkstat Command
 ```
