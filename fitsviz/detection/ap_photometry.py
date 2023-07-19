@@ -5,7 +5,8 @@ Link: https://ui.adsabs.harvard.edu/abs/1987PASP...99..191S/abstract
 
 from fitsviz.utils import cutils as cu
 import dask
-import dask.array as da
+import sys
+import logging
 from astropy.io import fits
 from photutils.detection import DAOStarFinder
 from astropy.stats import sigma_clipped_stats
@@ -50,16 +51,20 @@ class ApertureDAO(DetectionBase):
             sources,summary (np.ndarray,list): List of sources and summary statistics
         """
 
+        try:
+
+            # Sigma clipped statistics for RMS file
+            mean, median, _ = sigma_clipped_stats(rms_data, sigma=3.0)
+            # find the stars with DAO alg
+
+
+            daofind = DAOStarFinder(fwhm=3.0, threshold=5. * mean)
+            
+            sources = daofind(science_data - median)
+        except:
+            logging.exception(msg = "No sources found")
+            sys.exit()
         
-        # Sigma clipped statistics for RMS file
-        mean, median, _ = sigma_clipped_stats(rms_data, sigma=3.0)
-        # find the stars with DAO alg
-
-
-        daofind = DAOStarFinder(fwhm=3.0, threshold=5. * mean)
-    
-        sources = daofind(science_data - median)
-
         return sources
 
     @dask.delayed
@@ -83,12 +88,11 @@ class ApertureDAO(DetectionBase):
         Given a list of sources, get mean flux and spectral index
 
         Args:
-            sources (pd.DataFrame):
+            sources (astropy.table.QTable):
 
         Returns:
             summary (pd.DataFrame): Summary statistics
         """
-        # client = Client()
 
         # Convert QTable to Dask DataFrame and select centroids
         positions = dd.from_pandas(sources["xcentroid", "ycentroid"].to_pandas(
@@ -106,8 +110,7 @@ class ApertureDAO(DetectionBase):
         for flux in fluxes:
             flux_df = flux_df.append(pd.Series(flux))
 
-        # Get frequencies of all files
-
+        # Get frequencies of all files, transpose for row processing
         flux_df = flux_df.compute()
         flux_df = flux_df.T
 
@@ -117,7 +120,10 @@ class ApertureDAO(DetectionBase):
         return flux_df
 
     def get_summary(self, flux_df):
-        """_summary_
+        """
+        Given a dataframe of flux values, calculate the spectral index
+        and return a dataframe with source positions , flux at lowest frequency
+        and spectral index
 
         Args:
             flux_df (_type_): _description_

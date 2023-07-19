@@ -111,14 +111,18 @@ def mkstat(input_dir, output_dir, output_file_name, algorithm):
         "flux_freq_file": path.join(output_dir, "flux_freq.csv"),
         "summary_file": path.join(output_dir, output_file_name)
     }
-    try:
+    
+
     with open(path.join(output_dir, "link.json"), "w") as json_file:
         json.dump(results_index, json_file)
-    
+        
+        
+    try:
         fluxs.to_csv(results_index["flux_freq_file"], index=False)
         summary.to_csv(results_index["summary_file"], index=False)
     except Exception as e:
-        print("Sources found but file writing not successful")
+        logging.exception("Error writing files to disk")
+        
     
     
 
