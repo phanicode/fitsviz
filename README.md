@@ -66,8 +66,7 @@ Options:
 
 Example usage:
 
-fitsviz mkviz -i link.json -b bokeh
-
+fitsviz mkviz -i link.json -vt grid
 
 
 ## Dependencies
