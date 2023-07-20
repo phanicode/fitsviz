@@ -11,7 +11,7 @@ from abc import abstractmethod, ABCMeta
 class DetectionBase(metaclass=ABCMeta):
     """Base class for detection algorithms,
     new algorithms should inherit from this class and implement
-    the get_sources method.
+    the get_sources,get_fluxs and get_summary method.
 
     Args:
         metaclass (_type_, optional): _description_. Defaults to ABCMeta.
