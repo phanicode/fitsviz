@@ -67,8 +67,19 @@ class ApertureDAO(DetectionBase):
         
         return sources
 
-    @dask.delayed
+    
     def _calculate_flux(self, sci, positions):
+        """Calculate flux by subtracting median RMS and
+        taking a 10x10 square aperture for flux calculation.
+        Flux is defined as the sum of pixels in aperture.
+
+        Args:
+            sci (str): science file name
+            positions (dask.DataFrame): x and y values of detected sources
+
+        Returns:
+            dask_array (list) : list containing flux in each source
+        """
         sciimg = cu.load_fits(sci)
         median = np.nanmedian(cu.sci_to_rms(sci))
         flux_accross_frequencies = []

@@ -12,10 +12,9 @@ def test_load_fits():
 
 # Test sci_to_rms function
 def test_sci_to_rms():
-    rms_data = sci_to_rms("path/to/science_file.fits")
+    rms_data = sci_to_rms("VLASS1.2.se.T01t08.J033228-363000.06.2048.v1.spw2.I.iter3.image.pbcor.tt0.subim.fits")
     assert isinstance(rms_data, np.ndarray)
     assert rms_data.ndim == 2
-
 
 
 # Test get_image_with_least_freq function

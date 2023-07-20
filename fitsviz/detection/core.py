@@ -1,7 +1,8 @@
 """
 This module implements the base class and star finder kernel for
-detecting stars in an astronomical image. Each star-finding class should
-define a method called ``find_stars`` that finds stars in an image.
+detecting stars in an astronomical image.
+All source detection algorithms should have DetectionBase as the base class
+and implement `get_sources` ,`get_fluxs` and `get_summary`
 """
 
 from abc import abstractmethod, ABCMeta
