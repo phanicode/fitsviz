@@ -46,13 +46,21 @@ def mkviz(link_file, output_dir, backend, vis_type):
     sci_file = data["science_file"]
     flux_df = pd.read_csv(data["flux_freq_file"])
     sources = pd.read_csv(data["summary_file"])
-    if backend == "bokeh":
-        if vis_type == "all":
-            plot_bokeh.plot_flux_freq(flux_df, sources)
+    print(backend)
+    print(vis_type)
+    if backend == " bokeh":
+        if vis_type == "fvf":
+            print('fvf')
+            fig = plot_bokeh.plot_flux_freq(flux_df, sources)
+            print(fig)
         elif vis_type == "grid":
-            plot_bokeh.grid_view(sci_file, sources)
-        elif vis_type == "fvf":
-            plot_bokeh.visualize_source(sci_file, sources)
+            print('grid')
+            fig = plot_bokeh.grid_view(sci_file, sources)
+            print(fig)
+        elif vis_type == "raw":
+            print('raw')
+            fig = plot_bokeh.visualize_source(sci_file, sources)
+            print(fig)
 
 
 @fitsviz.command()
@@ -79,6 +87,7 @@ def mkstat(input_dir, output_dir, output_file_name, algorithm):
     3) sources.csv: Contains source position, flux and spectral index measurements  """
 
     science_files = glob.glob(input_dir + "/*.pbcor.tt0.subim.fits")
+    print(len(science_files))
 
     if len(science_files) == 0:
         raise click.BadParameter('No science images found in directory')
@@ -131,6 +140,6 @@ def mkstat(input_dir, output_dir, output_file_name, algorithm):
 
 
 if __name__ == "__main__":
-    client = Client()
+    client = cu.create_dask_client(n_workers=4)
     fitsviz()
-    client = client.close()
+    client = cu.cleanup_dask_client(client)

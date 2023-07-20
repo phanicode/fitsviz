@@ -66,8 +66,8 @@ class ApertureDAO(DetectionBase):
             sys.exit()
         
         return sources
-
     
+    @dask.delayed
     def _calculate_flux(self, sci, positions):
         """Calculate flux by subtracting median RMS and
         taking a 10x10 square aperture for flux calculation.

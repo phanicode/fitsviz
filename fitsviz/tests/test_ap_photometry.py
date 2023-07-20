@@ -39,6 +39,7 @@ def test_calculate_flux():
 def test_get_fluxs():
     # Create test sources DataFrame
     sources = pd.DataFrame({'xcentroid': [10, 20], 'ycentroid': [15, 25]})
+    
 
     # Instantiate ApertureDAO
     dao = ApertureDAO(["sci1.fits", "sci2.fits"])
@@ -58,6 +59,7 @@ def test_get_summary():
     dao = ApertureDAO(["sci1.fits", "sci2.fits"])
 
     # Call the get_summary method
+    
     summary = dao.get_summary(flux_df)
 
     # Assert the output type and shape
